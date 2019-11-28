@@ -8,3 +8,18 @@ package AutoReservation;
 
 service AutoService {
 }
+
+message AutoDto {
+    int32 id = 1;
+    int32 basistarif = 2;
+    string marke = 3;
+    AutoKlasse autoKlasse = 4;
+    bytes rowVersion = 5;
+    int32 tagestarif = 6;
+}
+
+enum AutoKlasse {
+    LUXUSKLASSE = 0;
+    MITTELKLASSE = 1;
+    STANDARD = 2;
+}

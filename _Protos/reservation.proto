@@ -11,3 +11,12 @@ package AutoReservation;
 
 service ReservationService {
 }
+
+message ReservationDto {
+    google.protobuf.Timestamp bis = 1;
+    int32 reservationsNr = 2;
+    bytes rowVersion = 3;
+    google.protobuf.Timestamp von = 4;
+    AutoDto auto = 5;
+    KundeDto kunde = 6;
+}
