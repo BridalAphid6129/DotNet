@@ -1,4 +1,5 @@
 ﻿using System;
+using AutoReservation.Service.Grpc.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -28,9 +29,9 @@ namespace AutoReservation.Service.Grpc
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<Services.AutoService>();
-                endpoints.MapGrpcService<Services.KundeService>();
-                endpoints.MapGrpcService<Services.ReservationService>();
+                endpoints.MapGrpcService<AutoService>();
+                endpoints.MapGrpcService<KundeService>();
+                endpoints.MapGrpcService<ReservationService>();
 
                 endpoints.MapGet("/", async context =>
                 {
