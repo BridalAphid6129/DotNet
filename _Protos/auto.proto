@@ -6,6 +6,9 @@ option csharp_namespace = "AutoReservation.Service.Grpc";
 
 package AutoReservation;
 
+/*
+protoc --proto_path=_Protos --csharp_out=AutoReservation.Service.Grpc/dto _Protos/auto.proto
+*/
 service AutoService {
 }
 
