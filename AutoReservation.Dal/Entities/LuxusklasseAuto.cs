@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace AutoReservation.Dal.Entities
 {
     public class LuxusklasseAuto : Auto
     {
-        public int Basistarif { get; set; }
+        [Column("basetarif", TypeName = "DECIMAL")]
+        public int? Basistarif { get; set; }
     }
 }
