@@ -1,21 +1,20 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AutoReservation.Dal.Entities
 {
     public class Kunde
     {
-        [Column("AbtNr")]
-        public DateTime Geburtsdatum { get; set; }
-        [Key, Column("AbtNr")]
-
         public int Id { get; set; }
-        [Column("AbtNr")]
+        public DateTime Geburtsdatum { get; set; }
         public string Nachname { get; set; }
-        [Column("AbtNr")]
-        public byte[] RowVersion { get; set; }
-        [Column("AbtNr")]
         public string Vorname { get; set; }
+        public byte[] RowVersion { get; set; }
+
+        public ICollection<Reservation> Reservationen { get; set; }
+
     }
 }

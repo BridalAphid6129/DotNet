@@ -1,29 +1,20 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AutoReservation.Dal.Entities
 {
     public class Reservation
     {
-        [Column("AutoId"), Required]
-        public int AutoId { get; set; }
-        [Column("Bis", TypeName = "DATETIME")]
-
-        public DateTime Bis { get; set; }
-        [Column("KundenId"), Required]
-
-        public int KundeId { get; set; }
-        [Key, Column("ReservationsNr")]
+        [Key, Column("ReservationsNr"), Required]
         public int ReservationsNr { get; set; }
-        [Column("row")]
-        public byte[] RowVersion { get; set; }
-        [Column("Von", TypeName = "DATETIME")]
+        public int AutoId { get; set; }
+        public int KundeId { get; set; }
+        public DateTime Bis { get; set; }
         public DateTime Von { get; set; }
-
-        [ForeignKey(nameof(AutoId))] 
-        public virtual Auto Auto { get; set; }
-        [ForeignKey(nameof(KundeId))]
-        public virtual Kunde Kunde { get; set; }
+        public byte[] RowVersion { get; set; }
+        public Auto Auto { get; set; }
+        public Kunde Kunde { get; set; }
     }
 }

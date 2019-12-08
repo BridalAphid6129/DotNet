@@ -54,7 +54,7 @@ namespace AutoReservation.Service.Grpc
             if (entity is LuxusklasseAuto auto)
             {
                 dto.AutoKlasse = AutoKlasse.Luxusklasse;
-                dto.Basistarif = auto.Basistarif;
+                //dto.Basistarif = auto.Basistarif;
             }
 
             return dto;

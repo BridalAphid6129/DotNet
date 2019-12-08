@@ -33,7 +33,7 @@ namespace AutoReservation.Dal
                     optional: true,
                     reloadOnChange: true
                 )
-                .Build();           
+                .Build();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
