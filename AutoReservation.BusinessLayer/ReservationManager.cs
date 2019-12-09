@@ -22,32 +22,30 @@ namespace AutoReservation.BusinessLayer
             {
                 var query = from c in context.Reservationen
                     where c.ReservationsNr == id
-                    select c;
-                var reservation =
-                    context.Reservationen.Find(query);
-                return reservation;
+                    select c; 
+                return await context.Reservationen.FindAsync(query);
             }
         }
 
-        public void AddReservation(Reservation reservation)
+        public async void AddReservation(Reservation reservation)
         {
             using (AutoReservationContext context = new AutoReservationContext())
             {
-                context.Reservationen.AddAsync(reservation);
+                await context.Reservationen.AddAsync(reservation);
                 context.Entry(reservation).State = EntityState.Added;
-                context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
         }
-        public void DeleteReservation(Reservation reservation)
+        public async void DeleteReservation(Reservation reservation)
         {
             using (AutoReservationContext context = new AutoReservationContext())
             {
                 context.Reservationen.Remove(reservation);
                 context.Entry(reservation).State = EntityState.Deleted;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
-        public void ModifyReservation(Reservation reservation, int id, int autoid, int kundenid, DateTime von, DateTime bis, Auto auto , Kunde kunde)
+        public async void ModifyReservation(Reservation reservation, int id, int autoid, int kundenid, DateTime von, DateTime bis, Auto auto , Kunde kunde)
         {
             using (AutoReservationContext context = new AutoReservationContext())
             {
@@ -60,7 +58,7 @@ namespace AutoReservation.BusinessLayer
                 toModify.AutoId = autoid;
                 toModify.KundeId = kundenid;
                 context.Entry(reservation).State = EntityState.Modified;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
     }

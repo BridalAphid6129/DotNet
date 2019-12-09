@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoReservation.Dal;
 using AutoReservation.Dal.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace AutoReservation.BusinessLayer
 {
@@ -25,26 +23,17 @@ namespace AutoReservation.BusinessLayer
             {
                 var query = from c in context.Autos where c.Id == autoId
                             select c;
-                var auto =
-                context.Autos.Find(query);
-                return auto;
+                return await context.Autos.FindAsync(query);
             }
         }
 
-        public async void AddAuto(int id, String marke, int tagestarif, int autoklasse)
+        public async void AddAuto(Auto auto)
         {
             using (AutoReservationContext context = new AutoReservationContext())
             {
-                Auto auto = new StandardAuto()
-                {
-                    Tagestarif = tagestarif,
-                    Id = id,
-                    Marke = marke,
-                    AutoKlasse = autoklasse
-                };
-                context.Autos.AddAsync(auto);
+                await context.Autos.AddAsync(auto);
                 context.Entry(auto).State = EntityState.Added;
-                context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
         }
         public async void DeleteAuto(Auto auto)
@@ -53,7 +42,7 @@ namespace AutoReservation.BusinessLayer
             {
                 context.Autos.Remove(auto);
                 context.Entry(auto).State = EntityState.Deleted;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
         public async void ModifyAuto(Auto auto, int id, String marke, int tagestarif, int autoklasse)
@@ -66,7 +55,7 @@ namespace AutoReservation.BusinessLayer
                 toModify.Marke = marke;
                 toModify.Tagestarif = tagestarif;
                 context.Entry(auto).State = EntityState.Modified;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
     }

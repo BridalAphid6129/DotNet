@@ -23,31 +23,29 @@ namespace AutoReservation.BusinessLayer
                 var query = from c in context.Kunden
                     where c.Id == id
                     select c;
-                var kunde =
-                    context.Kunden.Find(query);
-                return kunde;
+                return await context.Kunden.FindAsync(query);
             }
         }
 
-        public void AddKunde(Kunde kunde)
+        public async void AddKunde(Kunde kunde)
         {
             using (AutoReservationContext context = new AutoReservationContext())
             {
-                context.Kunden.AddAsync(kunde);
+                await context.Kunden.AddAsync(kunde);
                 context.Entry(kunde).State = EntityState.Added;
-                context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
         }
-        public void DeleteKunde(Kunde kunde)
+        public async void DeleteKunde(Kunde kunde)
         {
             using (AutoReservationContext context = new AutoReservationContext())
             {
                 context.Kunden.Remove(kunde);
                 context.Entry(kunde).State = EntityState.Deleted;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
-        public void ModifyKunde(Kunde kunde, int id, DateTime geburtstag, String nachname, String vorname)
+        public async void ModifyKunde(Kunde kunde, int id, DateTime geburtstag, String nachname, String vorname)
         {
             using (AutoReservationContext context = new AutoReservationContext())
             {
@@ -57,7 +55,7 @@ namespace AutoReservation.BusinessLayer
                 toModify.Nachname = nachname;
                 toModify.Vorname = vorname;
                 context.Entry(kunde).State = EntityState.Modified;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
     }
