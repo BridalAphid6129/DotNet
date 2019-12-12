@@ -1,0 +1,14 @@
+version: "3"
+volumes:
+  db-data:
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
+    container_name: mssqldb
+    environment:
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: 'yourStrong(!)Password'
+    ports:
+      - 1433:1433
+    volumes:
+      - db-data:/var/opt/mssql/data
