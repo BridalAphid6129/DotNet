@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AutoReservation.Dal;
 using AutoReservation.TestEnvironment;
 using Xunit;
 
@@ -18,10 +19,13 @@ namespace AutoReservation.BusinessLayer.Testing
         [Fact]
         public async Task UpdateReservationTest()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
-            // act
-            // assert
+            await using var AutoReservationContext = new AutoReservationContext();
+            var reservation = await _target.GetReservationById(1);
+            reservation.KundeId = 3;
+            await _target.ModifyReservation(reservation);
+            var result = await _target.GetReservationById(1);
+            Assert.Equal(3, result.KundeId);
+
         }
     }
 }
