@@ -11,7 +11,7 @@ namespace AutoReservation.Dal.Entities
     {
         public int Id { get; set; }
         public string Marke { get; set; }
-        public byte[] RowVersion { get; set; }
+        public byte[]? RowVersion { get; set; }
         public int Tagestarif { get; set; }
         public int AutoKlasse { get; set; }
 

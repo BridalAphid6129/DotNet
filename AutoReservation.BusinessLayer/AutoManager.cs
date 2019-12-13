@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoReservation.BusinessLayer.Exceptions;
 using AutoReservation.Dal;
 using AutoReservation.Dal.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -24,35 +25,46 @@ namespace AutoReservation.BusinessLayer
                             select c;
             return await context.Autos.FindAsync(query);
         }
-
-        public async void AddAuto(Auto auto)
+        public async Task AddAuto(Auto auto)
         {
-            await using var context = new AutoReservationContext();
-            await context.Autos.AddAsync(auto);
-            context.Entry(auto).State = EntityState.Added;
-            await context.SaveChangesAsync();
-
+            try
+            {
+                await using var context = new AutoReservationContext();
+                context.Entry(auto).State = EntityState.Added;
+                await context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new OptimisticConcurrencyException<Auto>("failed to create: ", auto);
+            }
         }
 
-        public async void DeleteAuto(Auto auto)
+        public async Task DeleteAuto(Auto auto)
         {
-            await using var context = new AutoReservationContext();
-            context.Autos.Remove(auto);
-            context.Entry(auto).State = EntityState.Deleted;
-            await context.SaveChangesAsync();
+            try
+            {
+                await using var context = new AutoReservationContext();
+                context.Entry(auto).State = EntityState.Deleted;
+                await context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new OptimisticConcurrencyException<Auto>("failed to delete: ", auto);
+            } 
         }
 
-        public async void ModifyAuto(Auto auto, int id, string marke, int tagestarif, int autoklasse)
+        public async Task ModifyAuto(Auto auto)
         {
             await using var context = new AutoReservationContext();
-            var toModify = context.Autos.Find(auto);
-            toModify.Id = id;
-            toModify.AutoKlasse = autoklasse;
-            toModify.Marke = marke;
-            toModify.Tagestarif = tagestarif;
-            context.Entry(auto).State = EntityState.Modified;
-            await context.SaveChangesAsync();
-
+            try
+            {
+                context.Entry(auto).State = EntityState.Modified; 
+                await context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new OptimisticConcurrencyException<Auto>("failed to update: ", auto);
+            }
         }
     }
 }

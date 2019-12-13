@@ -13,8 +13,10 @@ namespace AutoReservation.Dal.Entities
         public int KundeId { get; set; }
         public DateTime Bis { get; set; }
         public DateTime Von { get; set; }
-        public byte[] RowVersion { get; set; }
-        public Auto Auto { get; set; }
-        public Kunde Kunde { get; set; }
+        public byte[]? RowVersion { get; set; }
+        [ForeignKey(nameof(AutoId))]
+        public virtual Auto Auto { get; set; }
+        [ForeignKey(nameof(KundeId))]
+        public virtual Kunde Kunde { get; set; }
     }
 }

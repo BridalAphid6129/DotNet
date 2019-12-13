@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoReservation.BusinessLayer.Exceptions;
 using AutoReservation.Dal;
 using AutoReservation.Dal.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace AutoReservation.BusinessLayer
 {
@@ -16,41 +19,56 @@ namespace AutoReservation.BusinessLayer
             await using var context = new AutoReservationContext();
             return await context.Kunden.ToListAsync();
         }
+
         public async Task<Kunde> GetKundeById(int id)
         {
             await using var context = new AutoReservationContext();
-            var query = from c in context.Kunden
-                where c.Id == id
-                select c;
+                var query = from c in context.Kunden
+                    where c.Id == id
+                    select c;
             return await context.Kunden.FindAsync(query);
         }
 
-        public async void AddKunde(Kunde kunde)
+        public async Task AddKunde(Kunde kunde)
         {
-            await using var context = new AutoReservationContext();
-            await context.Kunden.AddAsync(kunde);
-            context.Entry(kunde).State = EntityState.Added;
-            await context.SaveChangesAsync();
+            try
+            {
+                await using var context = new AutoReservationContext();
+                context.Entry(kunde).State = EntityState.Added;
+                await context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new OptimisticConcurrencyException<Kunde>("failed to create: ", kunde);
+            }
         }
-        
-        public async void DeleteKunde(Kunde kunde)
+
+        public async Task DeleteKunde(Kunde kunde)
         {
-            await using var context = new AutoReservationContext();
-            context.Kunden.Remove(kunde);
-            context.Entry(kunde).State = EntityState.Deleted;
-            await context.SaveChangesAsync();
+            try
+            {
+                await using var context = new AutoReservationContext();
+                context.Entry(kunde).State = EntityState.Deleted;
+                await context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new OptimisticConcurrencyException<Kunde>("failed to create: ", kunde);
+            }
         }
-        
-        public async void ModifyKunde(Kunde kunde, int id, DateTime geburtstag, String nachname, String vorname)
+
+        public async Task UpdateKunde(Kunde kunde)
         {
-            await using var context = new AutoReservationContext();
-            var toModify = context.Kunden.Find(kunde);
-            toModify.Id = id; 
-            toModify.Geburtsdatum = geburtstag;
-            toModify.Nachname = nachname;
-            toModify.Vorname = vorname;
-            context.Entry(kunde).State = EntityState.Modified;
-            await context.SaveChangesAsync();
+            try
+            {
+                await using var context = new AutoReservationContext();
+                context.Entry(kunde).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new OptimisticConcurrencyException<Kunde>("failed to create: ", kunde);
+            }
         }
     }
 }
