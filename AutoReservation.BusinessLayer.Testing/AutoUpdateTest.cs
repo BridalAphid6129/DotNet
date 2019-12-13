@@ -22,7 +22,7 @@ namespace AutoReservation.BusinessLayer.Testing
             var auto = await _target.GetAutoById(3);
             auto.Marke = "Lada";
             // act
-            _target.ModifyAuto(auto);
+            await _target.ModifyAuto(auto);
             // assert
             var result = await _target.GetAutoById(3);
             Assert.Equal("Lada", result.Marke);
