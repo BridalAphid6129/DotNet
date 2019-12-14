@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoReservation.Dal;
 using AutoReservation.TestEnvironment;
 using Xunit;
@@ -19,7 +18,6 @@ namespace AutoReservation.BusinessLayer.Testing
         [Fact]
         public async Task UpdateKundeTest()
         {
-            await using var AutoReservationContext = new AutoReservationContext();
             var kunde = await _target.GetKundeById(1);
             kunde.Vorname = "Elfriede";
             await _target.UpdateKunde(kunde);

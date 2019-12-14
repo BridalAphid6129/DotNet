@@ -25,32 +25,19 @@ namespace AutoReservation.BusinessLayer
                             select c;
             return await context.Autos.FindAsync(query);
         }
+
         public async Task AddAuto(Auto auto)
         {
-            try
-            {
-                await using var context = new AutoReservationContext();
-                context.Entry(auto).State = EntityState.Added;
-                await context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                throw new OptimisticConcurrencyException<Auto>("failed to create: ", auto);
-            }
+            await using var context = new AutoReservationContext();
+            context.Entry(auto).State = EntityState.Added;
+            await context.SaveChangesAsync();
         }
 
         public async Task DeleteAuto(Auto auto)
         {
-            try
-            {
-                await using var context = new AutoReservationContext();
-                context.Entry(auto).State = EntityState.Deleted;
-                await context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                throw new OptimisticConcurrencyException<Auto>("failed to delete: ", auto);
-            } 
+            await using var context = new AutoReservationContext();
+            context.Entry(auto).State = EntityState.Deleted;
+            await context.SaveChangesAsync();
         }
 
         public async Task ModifyAuto(Auto auto)

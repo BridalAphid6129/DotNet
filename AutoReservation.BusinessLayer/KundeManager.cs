@@ -31,30 +31,16 @@ namespace AutoReservation.BusinessLayer
 
         public async Task AddKunde(Kunde kunde)
         {
-            try
-            {
-                await using var context = new AutoReservationContext();
-                context.Entry(kunde).State = EntityState.Added;
-                await context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                throw new OptimisticConcurrencyException<Kunde>("failed to create: ", kunde);
-            }
+            await using var context = new AutoReservationContext();
+            context.Entry(kunde).State = EntityState.Added;
+            await context.SaveChangesAsync();
         }
 
         public async Task DeleteKunde(Kunde kunde)
         {
-            try
-            {
-                await using var context = new AutoReservationContext();
-                context.Entry(kunde).State = EntityState.Deleted;
-                await context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                throw new OptimisticConcurrencyException<Kunde>("failed to create: ", kunde);
-            }
+            await using var context = new AutoReservationContext();
+            context.Entry(kunde).State = EntityState.Deleted;
+            await context.SaveChangesAsync();
         }
 
         public async Task UpdateKunde(Kunde kunde)

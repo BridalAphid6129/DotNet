@@ -29,34 +29,26 @@ namespace AutoReservation.BusinessLayer
 
         public async Task AddReservation(Reservation reservation)
         {
-            try
+            await using var context = new AutoReservationContext();
+            if (AvailabilityCheck(reservation).Result)
             {
-                await using var context = new AutoReservationContext();
-                if (AvailabilityCheck(reservation).Result)
-                {
-                    throw new AutoUnavailableException("Auto unavailable during Von to Bis");
-                }
-                context.Entry(reservation).State = EntityState.Added;
-                await context.SaveChangesAsync();
+                throw new AutoUnavailableException("Auto unavailable during Von to Bis");
             }
-            catch (Exception e)
+
+            if (DateRangeCheck(reservation).Result)
             {
-                throw new OptimisticConcurrencyException<Reservation>("failed to create: ", reservation);
+                throw new InvalidDateRangeException("Incorrect Dates");
             }
+
+            context.Entry(reservation).State = EntityState.Added;
+            await context.SaveChangesAsync();
         }
 
         public async Task DeleteReservation(Reservation reservation)
         {
-            try
-            {
-                await using var context = new AutoReservationContext();
-                context.Entry(reservation).State = EntityState.Deleted;
-                await context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                throw new OptimisticConcurrencyException<Reservation>("failed to create: ", reservation);
-            }
+            await using var context = new AutoReservationContext();
+            context.Entry(reservation).State = EntityState.Deleted;
+            await context.SaveChangesAsync();
         }
 
         public async Task ModifyReservation(Reservation reservation)
@@ -67,6 +59,10 @@ namespace AutoReservation.BusinessLayer
                 if (!AvailabilityCheck(reservation).Result)
                 {
                     throw new AutoUnavailableException("Auto unavailable during Von to Bis");
+                }
+                if (DateRangeCheck(reservation).Result)
+                {
+                    throw new InvalidDateRangeException("Incorrect Dates");
                 }
                 context.Entry(reservation).State = EntityState.Modified;
                 await context.SaveChangesAsync();
@@ -83,6 +79,12 @@ namespace AutoReservation.BusinessLayer
             return (Enumerable.Any(
                 context.Reservationen.Where(reservation => createreservation.AutoId == reservation.AutoId),
                 reservation => createreservation.Von > reservation.Bis));
+        }
+
+        private static async Task<bool> DateRangeCheck(Reservation reservation)
+        {
+            await using var context = new AutoReservationContext();
+            return reservation.Von == reservation.Bis;
         }
     }
 }

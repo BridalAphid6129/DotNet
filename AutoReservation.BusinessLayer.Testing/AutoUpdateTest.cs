@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoReservation.TestEnvironment;
 using Xunit;
 
@@ -14,7 +13,6 @@ namespace AutoReservation.BusinessLayer.Testing
         {
             _target = new AutoManager();
         }
-
         [Fact]
         public async Task UpdateAutoTest()
         {

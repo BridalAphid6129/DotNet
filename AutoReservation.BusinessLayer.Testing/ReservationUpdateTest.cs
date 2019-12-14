@@ -19,13 +19,11 @@ namespace AutoReservation.BusinessLayer.Testing
         [Fact]
         public async Task UpdateReservationTest()
         {
-            await using var AutoReservationContext = new AutoReservationContext();
             var reservation = await _target.GetReservationById(1);
             reservation.KundeId = 3;
             await _target.ModifyReservation(reservation);
             var result = await _target.GetReservationById(1);
             Assert.Equal(3, result.KundeId);
-
         }
     }
 }

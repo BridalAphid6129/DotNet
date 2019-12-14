@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using AutoReservation.Dal;
 using AutoReservation.TestEnvironment;
 using Xunit;
 
@@ -15,48 +17,53 @@ namespace AutoReservation.BusinessLayer.Testing
         }
 
         [Fact]
-        public void ScenarioOkay01TestAsync()
+        public async Task ScenarioOkay01TestAsync()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
-            // act
-            // assert
+            var dateVon = new DateTime(2019,12,14);
+            var dateBis = new DateTime(2019,12,15);
+            var reservation = await _target.GetReservationById(1);
+            reservation.Von = dateVon;
+            reservation.Bis = dateBis;
+            await _target.ModifyReservation(reservation);
         }
 
         [Fact]
-        public void ScenarioOkay02Test()
+        public async Task ScenarioOkay02Test()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
-            // act
-            // assert
+            var dateBis = new DateTime(2019,12,24);
+            var reservation = await _target.GetReservationById(1);
+            reservation.Von = DateTime.Today;
+            reservation.Bis = dateBis;
+            await _target.ModifyReservation(reservation);
         }
 
         [Fact]
-        public void ScenarioNotOkay01Test()
+        public async Task ScenarioNotOkay01Test()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
-            // act
-            // assert
+            var reservation = await _target.GetReservationById(1);
+            reservation.Von = DateTime.Today;
+            reservation.Bis = DateTime.Today;
+            await _target.ModifyReservation(reservation);
         }
 
         [Fact]
-        public void ScenarioNotOkay02Test()
+        public async Task ScenarioNotOkay02Test()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
-            // act
-            // assert
+            var reservation = await _target.GetReservationById(1);
+            var data = reservation.Von;
+            reservation.Von = reservation.Bis;
+            reservation.Bis = data;
+            await _target.ModifyReservation(reservation);
         }
 
         [Fact]
-        public void ScenarioNotOkay03Test()
+        public async Task ScenarioNotOkay03Test()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
-            // act
-            // assert
+            var testdate = new DateTime(2019, 12, 14);
+            var reservation = await _target.GetReservationById(1);
+            reservation.Von = testdate;
+            reservation.Bis = testdate;
+            await _target.ModifyReservation(reservation);
         }
     }
 }
