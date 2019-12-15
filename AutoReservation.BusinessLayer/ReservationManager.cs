@@ -27,7 +27,7 @@ namespace AutoReservation.BusinessLayer
             return context.Reservationen.FindAsync(query).Result;
         }
 
-        public async Task AddReservation(Reservation reservation)
+        public async Task<Reservation> AddReservation(Reservation reservation)
         {
             await using var context = new AutoReservationContext();
             if (AvailabilityCheck(reservation).Result)
@@ -42,16 +42,18 @@ namespace AutoReservation.BusinessLayer
 
             context.Entry(reservation).State = EntityState.Added;
             await context.SaveChangesAsync();
+            return reservation;
         }
 
-        public async Task DeleteReservation(Reservation reservation)
+        public async Task<Reservation> DeleteReservation(Reservation reservation)
         {
             await using var context = new AutoReservationContext();
             context.Entry(reservation).State = EntityState.Deleted;
             await context.SaveChangesAsync();
+            return reservation;
         }
 
-        public async Task ModifyReservation(Reservation reservation)
+        public async Task<Reservation> ModifyReservation(Reservation reservation)
         {
             try
             {
@@ -71,6 +73,7 @@ namespace AutoReservation.BusinessLayer
             {
                 throw new OptimisticConcurrencyException<Reservation>("failed to create: ", reservation);
             }
+            return reservation;
         }
 
         private static async Task<bool> AvailabilityCheck(Reservation createreservation)

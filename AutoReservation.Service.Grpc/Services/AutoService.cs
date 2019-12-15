@@ -21,16 +21,9 @@ namespace AutoReservation.Service.Grpc.Services
 
         public override async Task<AutoDtoList> GetAutos(Empty request, ServerCallContext context)
         {
-            try
-            {
                 var response = new AutoDtoList();
                 response.Items.AddRange(await autoManager.GetAllAutos().ConvertToDtos());
                 return response;
-            }
-            catch (Exception)
-            {
-                throw new RpcException(new Status(StatusCode.Internal, "Internal error occured."));
-            }
         }
 
         public override async Task<AutoDto> GetAuto(GetAutoRequest request, ServerCallContext context)
