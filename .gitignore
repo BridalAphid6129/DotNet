@@ -332,3 +332,7 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+
+# Appsettings.json & DAL change
+./Assets/appsettings.json
+./AutorReservation.Dal/AutoReservationContextBase.cs

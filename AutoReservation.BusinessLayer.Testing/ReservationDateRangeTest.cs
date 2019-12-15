@@ -24,7 +24,7 @@ namespace AutoReservation.BusinessLayer.Testing
             var reservation = await _target.GetReservationById(1);
             reservation.Von = dateVon;
             reservation.Bis = dateBis;
-            await _target.ModifyReservation(reservation);
+            await _target.UpdateReservation(reservation);
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace AutoReservation.BusinessLayer.Testing
             var reservation = await _target.GetReservationById(1);
             reservation.Von = DateTime.Today;
             reservation.Bis = dateBis;
-            await _target.ModifyReservation(reservation);
+            await _target.UpdateReservation(reservation);
         }
 
         [Fact]
@@ -43,17 +43,15 @@ namespace AutoReservation.BusinessLayer.Testing
             var reservation = await _target.GetReservationById(1);
             reservation.Von = DateTime.Today;
             reservation.Bis = DateTime.Today;
-            await _target.ModifyReservation(reservation);
+            await _target.UpdateReservation(reservation);
         }
 
         [Fact]
         public async Task ScenarioNotOkay02Test()
         {
             var reservation = await _target.GetReservationById(1);
-            var data = reservation.Von;
-            reservation.Von = reservation.Bis;
-            reservation.Bis = data;
-            await _target.ModifyReservation(reservation);
+            reservation.Bis = reservation.Von;
+            await _target.UpdateReservation(reservation);
         }
 
         [Fact]
@@ -63,7 +61,7 @@ namespace AutoReservation.BusinessLayer.Testing
             var reservation = await _target.GetReservationById(1);
             reservation.Von = testdate;
             reservation.Bis = testdate;
-            await _target.ModifyReservation(reservation);
+            await _target.UpdateReservation(reservation);
         }
     }
 }

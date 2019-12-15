@@ -23,10 +23,7 @@ namespace AutoReservation.BusinessLayer
         public async Task<Kunde> GetKundeById(int id)
         {
             await using var context = new AutoReservationContext();
-                var query = from c in context.Kunden
-                    where c.Id == id
-                    select c;
-            return await context.Kunden.FindAsync(query);
+            return await context.Kunden.FindAsync(id);
         }
 
         public async Task<Kunde> AddKunde(Kunde kunde)

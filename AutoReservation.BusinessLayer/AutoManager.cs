@@ -18,12 +18,10 @@ namespace AutoReservation.BusinessLayer
             return await context.Autos.ToListAsync();
         }
 
-        public async Task<Auto> GetAutoById(int autoId)
+        public async Task<Auto> GetAutoById(int id)
         {
             await using var context = new AutoReservationContext();
-            var query = from c in context.Autos where c.Id == autoId
-                            select c;
-            return await context.Autos.FindAsync(query);
+            return await context.Autos.FindAsync(id);
         }
 
         public async Task<Auto> AddAuto(Auto auto)
@@ -34,7 +32,7 @@ namespace AutoReservation.BusinessLayer
             return auto;
         }
 
-        public async Task<Auto> DeleteAuto(Auto auto)
+        public async Task<T> DeleteAuto <T>(T auto)
         {
             await using var context = new AutoReservationContext();
             context.Entry(auto).State = EntityState.Deleted;

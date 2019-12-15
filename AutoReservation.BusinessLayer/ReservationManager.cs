@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoReservation.BusinessLayer.Exceptions;
 using AutoReservation.Dal;
 using AutoReservation.Dal.Entities;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoReservation.BusinessLayer
@@ -21,10 +20,7 @@ namespace AutoReservation.BusinessLayer
         public async Task<Reservation> GetReservationById(int id)
         {
             await using var context = new AutoReservationContext();
-            var query = from c in context.Reservationen
-                where c.ReservationsNr == id
-                select c;
-            return context.Reservationen.FindAsync(query).Result;
+            return await context.Reservationen.FindAsync(id);
         }
 
         public async Task<Reservation> AddReservation(Reservation reservation)
@@ -53,27 +49,31 @@ namespace AutoReservation.BusinessLayer
             return reservation;
         }
 
-        public async Task<Reservation> ModifyReservation(Reservation reservation)
+        public async Task<Reservation> UpdateReservation(Reservation reservation)
         {
             try
             {
                 await using var context = new AutoReservationContext();
-                if (!AvailabilityCheck(reservation).Result)
+                if (await AvailabilityCheck(reservation))
                 {
                     throw new AutoUnavailableException("Auto unavailable during Von to Bis");
                 }
-                if (DateRangeCheck(reservation).Result)
+                if (await DateRangeCheck(reservation))
                 {
                     throw new InvalidDateRangeException("Incorrect Dates");
                 }
                 context.Entry(reservation).State = EntityState.Modified;
                 await context.SaveChangesAsync();
+                return reservation;
             }
             catch (Exception e)
             {
+                if (await DateRangeCheck(reservation))
+                {
+                    throw new InvalidDateRangeException("Incorrect Dates");
+                }
                 throw new OptimisticConcurrencyException<Reservation>("failed to create: ", reservation);
             }
-            return reservation;
         }
 
         private static async Task<bool> AvailabilityCheck(Reservation createreservation)
