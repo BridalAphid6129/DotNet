@@ -36,6 +36,8 @@ namespace AutoReservation.Dal
                 .Build();
         }
 
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -43,8 +45,8 @@ namespace AutoReservation.Dal
                 optionsBuilder
                     .EnableSensitiveDataLogging()
                     .UseLoggerFactory(Logger)
-                    //.UseInMemoryDatabase("AutoReservation");
-                    .UseSqlServer(Configuration.GetConnectionString("AutoReservation"));
+                    .UseInMemoryDatabase("AutoReservation");
+                    //.UseSqlServer(Configuration.GetConnectionString("AutoReservation"));
             }
         }
     }

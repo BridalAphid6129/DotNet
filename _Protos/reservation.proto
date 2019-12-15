@@ -10,6 +10,18 @@ option csharp_namespace = "AutoReservation.Service.Grpc";
 package AutoReservation;
 
 service ReservationService {
+    rpc GetKunden (google.protobuf.Empty) returns (ReservationDtoList);
+    rpc GetKundeById (GetReservationRequest) returns (ReservationDto);
+    rpc InsertKunde (ReservationDto) returns (google.protobuf.Empty);
+    rpc UpdateKunde (ReservationDto) returns (google.protobuf.Empty);
+}
+
+message GetReservationRequest {
+    int32 id_filter = 1;
+}
+
+message ReservationDtoList {
+    repeated ReservationDto items = 1;
 }
 
 message ReservationDto {

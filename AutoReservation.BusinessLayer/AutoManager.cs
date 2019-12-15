@@ -26,27 +26,30 @@ namespace AutoReservation.BusinessLayer
             return await context.Autos.FindAsync(query);
         }
 
-        public async Task AddAuto(Auto auto)
+        public async Task<Auto> AddAuto(Auto auto)
         {
             await using var context = new AutoReservationContext();
             context.Entry(auto).State = EntityState.Added;
             await context.SaveChangesAsync();
+            return auto;
         }
 
-        public async Task DeleteAuto(Auto auto)
+        public async Task<Auto> DeleteAuto(Auto auto)
         {
             await using var context = new AutoReservationContext();
             context.Entry(auto).State = EntityState.Deleted;
             await context.SaveChangesAsync();
+            return auto;
         }
 
-        public async Task ModifyAuto(Auto auto)
+        public async Task<Auto> ModifyAuto(Auto auto)
         {
             await using var context = new AutoReservationContext();
             try
             {
                 context.Entry(auto).State = EntityState.Modified; 
                 await context.SaveChangesAsync();
+                return auto;
             }
             catch (Exception e)
             {

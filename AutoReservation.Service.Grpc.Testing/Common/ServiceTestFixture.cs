@@ -24,6 +24,8 @@ namespace AutoReservation.Service.Grpc.Testing.Common
             
             _host.Start();
 
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
             Channel = GrpcChannel.ForAddress("https://localhost:50001");
         }
 
