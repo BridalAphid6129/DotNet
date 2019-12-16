@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AutoReservation.BusinessLayer.Exceptions;
 using AutoReservation.Dal;
 using AutoReservation.TestEnvironment;
 using Xunit;
@@ -43,7 +44,8 @@ namespace AutoReservation.BusinessLayer.Testing
             var reservation = await _target.GetReservationById(1);
             reservation.Von = DateTime.Today;
             reservation.Bis = DateTime.Today;
-            await _target.UpdateReservation(reservation);
+            async Task Act() => await _target.UpdateReservation(reservation);
+            await Assert.ThrowsAsync<InvalidDateRangeException>(Act);
         }
 
         [Fact]
@@ -51,7 +53,8 @@ namespace AutoReservation.BusinessLayer.Testing
         {
             var reservation = await _target.GetReservationById(1);
             reservation.Bis = reservation.Von;
-            await _target.UpdateReservation(reservation);
+            async Task Act() => await _target.UpdateReservation(reservation);
+            await Assert.ThrowsAsync<InvalidDateRangeException>(Act);
         }
 
         [Fact]
@@ -61,7 +64,8 @@ namespace AutoReservation.BusinessLayer.Testing
             var reservation = await _target.GetReservationById(1);
             reservation.Von = testdate;
             reservation.Bis = testdate;
-            await _target.UpdateReservation(reservation);
+            async Task Act() => await _target.UpdateReservation(reservation);
+            await Assert.ThrowsAsync<InvalidDateRangeException>(Act);
         }
     }
 }

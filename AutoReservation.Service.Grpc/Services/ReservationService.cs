@@ -42,7 +42,7 @@ namespace AutoReservation.Service.Grpc.Services
             try
             {
                 var reservation = request.ConvertToEntity();
-                var response = await reservationenManager.ModifyReservation(reservation);
+                var response = await reservationenManager.UpdateReservation(reservation);
                 return response.ConvertToDto();
             }
             catch (OptimisticConcurrencyException<Reservation> e)
