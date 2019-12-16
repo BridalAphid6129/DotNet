@@ -45,8 +45,8 @@ namespace AutoReservation.Dal
                 optionsBuilder
                     .EnableSensitiveDataLogging()
                     .UseLoggerFactory(Logger)
-                    //.UseInMemoryDatabase("AutoReservation");
-                    .UseSqlServer(Configuration.GetConnectionString("AutoReservation"));
+                    .UseInMemoryDatabase("AutoReservation");
+                    //.UseSqlServer(Configuration.GetConnectionString("AutoReservation"));
             }
         }
     }

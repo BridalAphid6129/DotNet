@@ -25,9 +25,6 @@ namespace AutoReservation.Service.Grpc.Testing
             var request = new Empty();
             var response = await _target.GetAutosAsync(request);
             Assert.Equal(4, response.Items.Count);
-            // arrange
-            // act
-            // assert
         }
 
         [Fact]
@@ -39,15 +36,12 @@ namespace AutoReservation.Service.Grpc.Testing
             Assert.Equal(id, response.Id);
             Assert.Equal("Fiat Punto", response.Marke);
             Assert.Equal(50, response.Tagestarif);
-            // arrange
-            // act
-            // assert
         }
 
         [Fact]
         public async Task GetAutoByIdWithIllegalIdTest()
         {
-            const int invalidId = 1000;
+            const int invalidId = 100;
             var request = new GetAutoRequest { IdFilter = invalidId };
             try
             {
@@ -57,31 +51,25 @@ namespace AutoReservation.Service.Grpc.Testing
             {
                 Assert.Equal(StatusCode.NotFound, e.StatusCode);
             }
-            // arrange
-            // act
-            // assert
         }
 
         [Fact]
         public async Task InsertAutoTest()
         {
             var autoToInsert = new AutoDto
-            { Marke = "Skoda Octavia", Tagestarif = 50, AutoKlasse = AutoKlasse.Mittelklasse };
-            var insertResponse = await _target.InsertAutoAsync(autoToInsert);
-            var getResponse = await _target.GetAutoAsync(new GetAutoRequest { IdFilter = insertResponse.Id });
-            Assert.Equal(autoToInsert.Marke, getResponse.Marke);
-            Assert.Equal(autoToInsert.Tagestarif, getResponse.Tagestarif);
-            Assert.Equal(autoToInsert.AutoKlasse, getResponse.AutoKlasse);
-            // arrange
-            // act
-            // assert
+            { Marke = "Opel", Tagestarif = 50, AutoKlasse = AutoKlasse.Mittelklasse };
+            var insertedAuto = await _target.InsertAutoAsync(autoToInsert);
+            var selectedAuto = await _target.GetAutoAsync(new GetAutoRequest { IdFilter = insertedAuto.Id });
+            Assert.Equal(autoToInsert.Marke, selectedAuto.Marke);
+            Assert.Equal(autoToInsert.Tagestarif, selectedAuto.Tagestarif);
+            Assert.Equal(autoToInsert.AutoKlasse, selectedAuto.AutoKlasse);
         }
 
         [Fact]
         public async Task DeleteAutoTest()
         {
             var autoToInsert = new AutoDto
-            { Marke = "Skoda Octavia", Tagestarif = 50, AutoKlasse = AutoKlasse.Mittelklasse };
+            { Marke = "Opel", Tagestarif = 50, AutoKlasse = AutoKlasse.Mittelklasse };
             var autoToDelete = await _target.InsertAutoAsync(autoToInsert);
             await _target.DeleteAutoAsync(autoToDelete);
             try
@@ -92,55 +80,46 @@ namespace AutoReservation.Service.Grpc.Testing
             {
                 Assert.Equal(StatusCode.NotFound, e.StatusCode);
             }
-            // arrange
-            // act
-            // assert
         }
 
         [Fact]
         public async Task UpdateAutoTest()
         {
             var autoToInsert = new AutoDto
-            { Marke = "Skoda Octavia", Tagestarif = 50, AutoKlasse = AutoKlasse.Mittelklasse };
-            const int newTagestarif = 55;
+            { Marke = "Opel", Tagestarif = 50, AutoKlasse = AutoKlasse.Mittelklasse };
+            const int newTagestarif = 100;
 
             var autoToUpdate = await _target.InsertAutoAsync(autoToInsert);
             autoToUpdate.Tagestarif = newTagestarif;
-            var updateResponse = await _target.UpdateAutoAsync(autoToUpdate);
+            var updatedAuto = await _target.UpdateAutoAsync(autoToUpdate);
 
-            Assert.Equal(autoToInsert.Marke, updateResponse.Marke);
-            Assert.Equal(newTagestarif, updateResponse.Tagestarif);
-            Assert.Equal(autoToInsert.AutoKlasse, updateResponse.AutoKlasse);
-            // arrange
-            // act
-            // assert
+            Assert.Equal(autoToInsert.Marke, updatedAuto.Marke);
+            Assert.Equal(newTagestarif, updatedAuto.Tagestarif);
+            Assert.Equal(autoToInsert.AutoKlasse, updatedAuto.AutoKlasse);
         }
 
         [Fact]
         public async Task UpdateAutoWithOptimisticConcurrencyTest()
         {
             var autoToInsert = new AutoDto
-            { Marke = "Skoda Octavia", Tagestarif = 50, AutoKlasse = AutoKlasse.Mittelklasse };
-            const int newTagestarifA = 55;
-            const int newTagestarifB = 45;
+            { Marke = "Opel", Tagestarif = 50, AutoKlasse = AutoKlasse.Mittelklasse };
+            const int newTagestarifA = 100;
+            const int newTagestarifB = 10;
 
-            var autoToUpdateA = await _target.InsertAutoAsync(autoToInsert);
-            autoToUpdateA.Tagestarif = newTagestarifA;
-            await _target.UpdateAutoAsync(autoToUpdateA);
+            var autoAToUpdate = await _target.InsertAutoAsync(autoToInsert);
+            autoAToUpdate.Tagestarif = newTagestarifA;
+            await _target.UpdateAutoAsync(autoAToUpdate);
 
-            var autoToUpdateB = autoToUpdateA;
-            autoToUpdateB.Tagestarif = newTagestarifB;
+            var autoBToUpdate = autoAToUpdate;
+            autoBToUpdate.Tagestarif = newTagestarifB;
             try
             {
-                await _target.UpdateAutoAsync(autoToUpdateB);
+                await _target.UpdateAutoAsync(autoBToUpdate);
             }
             catch (RpcException e)
             {
                 Assert.Equal(StatusCode.Aborted, e.StatusCode);
             }
-            // arrange
-            // act
-            // assert
         }
     }
 }
