@@ -6,6 +6,8 @@ using AutoReservation.BusinessLayer.Exceptions;
 using AutoReservation.Dal;
 using AutoReservation.Dal.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace AutoReservation.BusinessLayer
 {
@@ -80,12 +82,20 @@ namespace AutoReservation.BusinessLayer
             }
         }
 
-        private static async Task<bool> AvailabilityCheck(Reservation createreservation)
+        private static async Task<bool> AvailabilityCheck(Reservation createReservation)
         {
             await using var context = new AutoReservationContext();
-            return (Enumerable.Any(
-                context.Reservationen.Where(reservation => createreservation.AutoId == reservation.AutoId),
-                reservation => createreservation.Von > reservation.Bis));
+            var reservations = context.Reservationen.Where(r =>
+                r.AutoId == createReservation.AutoId && r.ReservationsNr != createReservation.ReservationsNr);
+            foreach (var reservation in reservations)
+            {
+                if (reservation.AutoId == createReservation.AutoId && 
+                    (reservation.Von < createReservation.Bis && createReservation.Von < reservation.Bis))
+                {
+                    throw new AutoUnavailableException("Auto unavailable");
+                }    
+            }
+            return true;
         }
 
         private static async Task<bool> DateRangeCheck(Reservation reservation)
