@@ -19,11 +19,14 @@ namespace AutoReservation.BusinessLayer.Testing
         [Fact]
         public async Task UpdateReservationTest()
         {
-            var reservation = await _target.GetReservationById(1);
-            var bis = DateTime.Today;
+            var reservation = await _target.GetReservationById(4);
+            var von = new DateTime(2019, 12, 24);
+            var bis = new DateTime(2019, 12, 28);
+            reservation.Von = von;
             reservation.Bis = bis;
             await _target.UpdateReservation(reservation);
-            var result = await _target.GetReservationById(1);
+            var result = await _target.GetReservationById(4);
+            Assert.Equal(von, result.Von);
             Assert.Equal(bis, result.Bis);
         }
     }

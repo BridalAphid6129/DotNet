@@ -154,12 +154,14 @@ namespace AutoReservation.BusinessLayer.Testing
         {
             //| --------Date 1-------- |
             //| ---Date 2--- |
-            var reservation1 = await _target.GetReservationById(1);
+            var reservation1 = await _target.GetReservationById(2);
             var date1von = new DateTime(2019, 10, 20);
             var date1bis = new DateTime(2020, 3, 15);
-            var reservation2 = await _target.GetReservationById(2);
+            var reservation2 = await _target.GetReservationById(3);
             var date2von = new DateTime(2019, 10, 20 );
             var date2bis = new DateTime(2019, 12, 28);
+            reservation1.AutoId = 1;
+            reservation2.AutoId = 1;
             reservation1.Von = date1von;
             reservation1.Bis = date1bis;
             reservation2.Von = date2von;
