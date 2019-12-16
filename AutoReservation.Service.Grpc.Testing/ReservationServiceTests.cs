@@ -25,19 +25,20 @@ namespace AutoReservation.Service.Grpc.Testing
         [Fact]
         public async Task GetReservationenTest()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
-            // act
-            // assert
+            var empty = new Empty();
+            var reservationen = await _target.GetReservationenAsync(empty);
+            Assert.Equal(4, reservationen.Items.Count);
         }
 
         [Fact]
         public async Task GetReservationByIdTest()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
-            // act
-            // assert
+            const int id = 1;
+            var request = new GetReservationRequest { IdFilter = id };
+            var response = await _target.GetReservationenByIdAsync(request);
+            Assert.Equal(id, response.ReservationsNr);
+            Assert.Equal(0, response.Auto.Id);
+            Assert.Equal(0, response.Kunde.Id);
         }
 
         [Fact]

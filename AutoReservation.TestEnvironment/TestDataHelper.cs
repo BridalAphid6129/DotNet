@@ -45,7 +45,7 @@ namespace AutoReservation.TestEnvironment
                 new Kunde {Nachname = "Zufall", Vorname = "Rainer", Geburtsdatum = new DateTime(1954, 11, 11)},
             };
 
-            int year = DateTime.Now.Year + 1;
+            int year = DateTime.Now.Year - 1;
             Reservation[] reservationen = {
                 new Reservation {Auto = autos[0], Kunde = kunden[0], Von = new DateTime(year, 01, 10), Bis = new DateTime(year, 01, 20)},
                 new Reservation {Auto = autos[1], Kunde = kunden[1], Von = new DateTime(year, 01, 10), Bis = new DateTime(year, 01, 20)},
