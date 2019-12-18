@@ -336,3 +336,5 @@ ASALocalRun/
 # Appsettings.json & DAL change
 ./Assets/appsettings.json
 ./AutorReservation.Dal/AutoReservationContextBase.cs
+
+/AutoReservation.Service.Grpc.Testing/Common/*

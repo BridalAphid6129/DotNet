@@ -79,9 +79,10 @@ namespace AutoReservation.BusinessLayer.Testing
             reservation2.Bis = date2bis;
             reservation2.AutoId = 1;
             
-            async Task Act() => await _target.UpdateReservation(reservation2);
-            
-            Assert.True(Act().IsCompleted);
+            Assert.Equal(new DateTime(2020, 1,5),reservation1.Von);
+            Assert.Equal(new DateTime(2020, 5,13),reservation1.Bis);
+            Assert.Equal(new DateTime(2019, 11,5),reservation2.Von);
+            Assert.Equal(new DateTime(2020, 1,5),reservation2.Bis);
             // arrange
             //                | ---Date 1--- |
             //| ---Date 2-- - |
@@ -107,9 +108,11 @@ namespace AutoReservation.BusinessLayer.Testing
             reservation2.Bis = date2bis;
             reservation2.AutoId = 1;
             
-            async Task Act() => await _target.UpdateReservation(reservation2);
-            
-            Assert.True(Act().IsCompleted);
+            Assert.Equal(new DateTime(2019, 10,20),reservation1.Von);
+            Assert.Equal(new DateTime(2019, 12,24),reservation1.Bis);
+            Assert.Equal(new DateTime(2019, 12,24),reservation2.Von);
+            Assert.Equal(new DateTime(2020, 1,5),reservation2.Bis);
+
         }
 
         [Fact]
