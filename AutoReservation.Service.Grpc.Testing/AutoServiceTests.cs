@@ -31,8 +31,8 @@ namespace AutoReservation.Service.Grpc.Testing
         public async Task GetAutoByIdTest()
         {
             const int id = 1;
-            var request = new GetAutoRequest { IdFilter = id };
-            var response = await _target.GetAutoAsync(request);
+            var request = new GetAutoRequest { Id = id };
+            var response = await _target.GetAutoByIdAsync(request);
             Assert.Equal(id, response.Id);
             Assert.Equal("Fiat Punto", response.Marke);
             Assert.Equal(50, response.Tagestarif);
@@ -42,10 +42,10 @@ namespace AutoReservation.Service.Grpc.Testing
         public async Task GetAutoByIdWithIllegalIdTest()
         {
             const int invalidId = 100;
-            var request = new GetAutoRequest { IdFilter = invalidId };
+            var request = new GetAutoRequest { Id = invalidId };
             try
             {
-                await _target.GetAutoAsync(request);
+                await _target.GetAutoByIdAsync(request);
             }
             catch (RpcException e)
             {
@@ -59,7 +59,7 @@ namespace AutoReservation.Service.Grpc.Testing
             var autoToInsert = new AutoDto
             { Marke = "Opel", Tagestarif = 50, AutoKlasse = AutoKlasse.Mittelklasse };
             var insertedAuto = await _target.InsertAutoAsync(autoToInsert);
-            var selectedAuto = await _target.GetAutoAsync(new GetAutoRequest { IdFilter = insertedAuto.Id });
+            var selectedAuto = await _target.GetAutoByIdAsync(new GetAutoRequest { Id = insertedAuto.Id });
             Assert.Equal(autoToInsert.Marke, selectedAuto.Marke);
             Assert.Equal(autoToInsert.Tagestarif, selectedAuto.Tagestarif);
             Assert.Equal(autoToInsert.AutoKlasse, selectedAuto.AutoKlasse);
@@ -74,7 +74,7 @@ namespace AutoReservation.Service.Grpc.Testing
             await _target.DeleteAutoAsync(autoToDelete);
             try
             {
-                await _target.GetAutoAsync(new GetAutoRequest { IdFilter = autoToDelete.Id });
+                await _target.GetAutoByIdAsync(new GetAutoRequest { Id = autoToDelete.Id });
             }
             catch (RpcException e)
             {

@@ -30,8 +30,8 @@ namespace AutoReservation.Service.Grpc.Testing
         public async Task GetKundeByIdTest()
         {
             const int id = 1;
-            var request = new GetKundeRequest { IdFilter = id };
-            var response = await _target.GetKundeAsync(request);
+            var request = new GetKundeRequest { Id = id };
+            var response = await _target.GetKundeByIdAsync(request);
             Assert.Equal(id, response.Id);
             Assert.Equal("Nass", response.Nachname);
             Assert.Equal("Anna", response.Vorname);
@@ -41,10 +41,10 @@ namespace AutoReservation.Service.Grpc.Testing
         public async Task GetKundeByIdWithIllegalIdTest()
         {
             const int invalidId = 100;
-            var request = new GetKundeRequest { IdFilter = invalidId };
+            var request = new GetKundeRequest { Id = invalidId };
             try
             {
-                await _target.GetKundeAsync(request);
+                await _target.GetKundeByIdAsync(request);
             }
             catch (RpcException e)
             {
@@ -62,7 +62,7 @@ namespace AutoReservation.Service.Grpc.Testing
                 Geburtsdatum = DateTime.UtcNow.ToTimestamp()
             };
             var insertedKunde = await _target.InsertKundeAsync(kundeToInsert);
-            var selectedKunde = await _target.GetKundeAsync(new GetKundeRequest { IdFilter = insertedKunde.Id });
+            var selectedKunde = await _target.GetKundeByIdAsync(new GetKundeRequest { Id = insertedKunde.Id });
             Assert.Equal(kundeToInsert.Vorname, selectedKunde.Vorname);
             Assert.Equal(kundeToInsert.Nachname, selectedKunde.Nachname);
             Assert.Equal(kundeToInsert.Geburtsdatum, selectedKunde.Geburtsdatum);
@@ -81,7 +81,7 @@ namespace AutoReservation.Service.Grpc.Testing
             await _target.DeleteKundeAsync(kundeToDelete);
             try
             {
-                await _target.GetKundeAsync(new GetKundeRequest { IdFilter = kundeToDelete.Id });
+                await _target.GetKundeByIdAsync(new GetKundeRequest { Id = kundeToDelete.Id });
             }
             catch (RpcException e)
             {

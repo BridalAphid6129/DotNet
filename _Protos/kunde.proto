@@ -9,14 +9,14 @@ package AutoReservation;
 
 service KundeService {
     rpc GetKunden (google.protobuf.Empty) returns (KundeDtoList);
-    rpc GetKunde (GetKundeRequest) returns (KundeDto);
+    rpc GetKundeById (GetKundeRequest) returns (KundeDto);
     rpc InsertKunde (KundeDto) returns (KundeDto);
     rpc UpdateKunde (KundeDto) returns (KundeDto);
     rpc DeleteKunde (KundeDto) returns (KundeDto);
 }
 
 message GetKundeRequest {
-    int32 id_filter = 1;
+    int32 id = 1;
 }
 
 message KundeDtoList {

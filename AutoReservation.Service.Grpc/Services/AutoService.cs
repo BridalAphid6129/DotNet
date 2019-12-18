@@ -26,9 +26,9 @@ namespace AutoReservation.Service.Grpc.Services
                 return response;
         }
 
-        public override async Task<AutoDto> GetAuto(GetAutoRequest request, ServerCallContext context)
+        public override async Task<AutoDto> GetAutoById(GetAutoRequest request, ServerCallContext context)
         {
-            AutoDto response = await autoManager.GetAutoById(request.IdFilter).ConvertToDto();
+            AutoDto response = await autoManager.GetAutoById(request.Id).ConvertToDto();
             return response ?? throw new RpcException(new Status(StatusCode.NotFound, "ID is invalid."));
         }
 

@@ -25,9 +25,9 @@ namespace AutoReservation.Service.Grpc.Services
             return response;
         }
 
-        public override async Task<KundeDto> GetKunde(GetKundeRequest request, ServerCallContext context)
+        public override async Task<KundeDto> GetKundeById(GetKundeRequest request, ServerCallContext context)
         {
-            KundeDto response = await kundeManager.GetKundeById(request.IdFilter).ConvertToDto();
+            KundeDto response = await kundeManager.GetKundeById(request.Id).ConvertToDto();
             return response ?? throw new RpcException(new Status(StatusCode.NotFound, "ID is invalid."));
         }
 

@@ -8,14 +8,14 @@ package AutoReservation;
 
 service AutoService {
     rpc GetAutos (google.protobuf.Empty) returns (AutoDtoList);
-    rpc GetAuto (GetAutoRequest) returns (AutoDto);
+    rpc GetAutoById (GetAutoRequest) returns (AutoDto);
     rpc InsertAuto (AutoDto) returns (AutoDto);
     rpc UpdateAuto (AutoDto) returns (AutoDto);
     rpc DeleteAuto (AutoDto) returns (AutoDto);
 }
 
 message GetAutoRequest {
-    int32 id_filter = 1;
+    int32 id = 1;
 }
 
 message AutoDtoList {

@@ -45,24 +45,24 @@ namespace AutoReservation.BusinessLayer
 
         public async Task<Reservation> UpdateReservation(Reservation reservation)
         {
-            /*try
-            {*/
+            try
+            {
                 await using var context = new AutoReservationContext();
                 await AvailabilityCheck(reservation);
                 await DateRangeCheck(reservation);
                 context.Entry(reservation).State = EntityState.Modified;
                 await context.SaveChangesAsync();
                 return reservation;
-            //}
-            /*catch (Exception e)
+            }
+            catch (Exception e)
             {
                 await AvailabilityCheck(reservation);
                 await DateRangeCheck(reservation);
                 throw new OptimisticConcurrencyException<Reservation>("failed to create: ", reservation);
-            }*/
+            }
         }
 
-        private static async Task AvailabilityCheck(Reservation createReservation)
+        public async Task AvailabilityCheck(Reservation createReservation)
         {
             await using var context = new AutoReservationContext();
             var reservations = context.Reservationen.Where(r =>
